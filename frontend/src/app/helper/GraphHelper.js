@@ -31,7 +31,7 @@ const DIR_Y = -1;
 /**
  * Function for drawing the graph background
  */
-export const drawGraph = (context) => {
+export const drawGraphBackground = (context) => {
   drawBorderedFrame(context);
   drawMarkers(context);
   drawAxes(context);

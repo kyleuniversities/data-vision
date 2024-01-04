@@ -1,4 +1,18 @@
 .clusterGraphContainer {
-    width: 100%;
-    text-align: center;
+    color: black;
+    padding-left: 0px;
+    padding-right: 120px;
+    width: 45%;
+}
+
+.clusterGenerateContainer {
+    width: 25%;
+}
+
+.clusterContentContainer {
+    display: flex;
+}
+
+.formInput {
+    width: 200px;
 }
