@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const testGenerate = require('../util/k-means-test-generator');
 
 // Prepare request parser
 router.use(bodyParser.json());
@@ -28,9 +29,20 @@ router.get('/test', async (req, res) => {
 // Set up test post endpoint
 router.post('/test-post', async (req, res) => {
   try {
-    const body = req.body;
-    body['status'] = 'Success!';
     return res.send(body);
+  } catch (error) {
+    return res.status(500).json({
+      error_message: 'Server Error',
+    });
+  }
+});
+
+// Set up generate test endpoint
+router.post('/generate-test', async (req, res) => {
+  try {
+    const numberOfPoints = parseInt(req.body.numberOfPoints);
+    const numberOfCentroids = parseInt(req.body.numberOfPoints);
+    return res.send(testGenerate(numberOfPoints, numberOfCentroids));
   } catch (error) {
     return res.status(500).json({
       error_message: 'Server Error',
