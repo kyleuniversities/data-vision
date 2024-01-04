@@ -111,7 +111,7 @@ function runGenerateRequest(numberOfPoints, numberOfCentroids) {
   };
 
   // Set up request url
-  const requestUrl = `/k-means/test`;
+  const requestUrl = `/k-means/test-post`;
 
   // Run the request
   return request(requestUrl, options).then((data) => {

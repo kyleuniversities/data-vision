@@ -25,5 +25,18 @@ router.get('/test', async (req, res) => {
   }
 });
 
+// Set up test post endpoint
+router.post('/test-post', async (req, res) => {
+  try {
+    const body = req.body;
+    body['status'] = 'Success!';
+    return res.send(body);
+  } catch (error) {
+    return res.status(500).json({
+      error_message: 'Server Error',
+    });
+  }
+});
+
 // Export routes
 module.exports = router;

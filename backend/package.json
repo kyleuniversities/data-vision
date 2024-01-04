@@ -4,7 +4,7 @@
   "description": "Data Vision is an app designed to visualize the effects of K-Means Clusters.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kyle Humphrey",
