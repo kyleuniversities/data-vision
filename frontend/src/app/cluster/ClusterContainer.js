@@ -14,8 +14,8 @@ import { request } from '../request';
 export const ClusterContainer = () => {
   // Set up form data
   const [commands, setCommands] = useState([]);
-  const [numberOfPoints, setNumberOfPoints] = useState('100');
-  const [numberOfCentroids, setNumberOfCentroids] = useState('5');
+  const [numberOfPoints, setNumberOfPoints] = useState('16');
+  const [numberOfCentroids, setNumberOfCentroids] = useState('8');
 
   // Set up draw function
   const draw = makeDrawFunctionFromCommands(commands);
