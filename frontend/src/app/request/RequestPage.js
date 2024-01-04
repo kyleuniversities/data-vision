@@ -1,12 +1,13 @@
 import React from 'react';
 import { SitePage } from '../SitePage';
+import { RequestContainer } from '../RequestContainer';
 
-export class HomePage extends React.Component {
+export class RequestPage extends React.Component {
   render() {
     return (
       <div>
         <SitePage>
-          <p>Hello</p>
+          <RequestContainer />
         </SitePage>
       </div>
     );
