@@ -21,6 +21,9 @@ router.get('/hello', function (req, res) {
   return res.send(`Hello World!`);
 });
 
+// Mount routes
+app.use('/k-means', require('./router/k-means-router'));
+
 // Launch app
 app.listen(port, () => {
   console.log(`Example app listening at ${port}.`);
