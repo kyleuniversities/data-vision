@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { fullRequest } from './request';
+import { fullRequest } from '../request';
 
 // Default host
 const HOST = 'http://localhost:5000';
