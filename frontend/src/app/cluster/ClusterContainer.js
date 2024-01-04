@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Canvas } from './Canvas';
 import './index.css';
-import { drawGraphBackground } from '../helper/GraphHelper';
+import { drawGraphBackground, drawPoint } from '../helper/GraphHelper';
 import { request } from '../request';
+import { fillCircle, fillStyle } from '../helper/DrawHelper';
 
 /**
  * Container for viewing cluster graphs
  */
 export const ClusterContainer = () => {
   // Set up form data
+  const [commands, setCommands] = useState([]);
   const [numberOfPoints, setNumberOfPoints] = useState('100');
   const [numberOfCentroids, setNumberOfCentroids] = useState('5');
 
-  // Sample animation
-  const draw = (context, time) => {
-    drawGraphBackground(context);
-  };
+  // Set up draw function
+  const draw = makeDrawFunctionFromCommands(commands);
 
   return (
     <div className="clusterContainer">
@@ -39,6 +39,7 @@ export const ClusterContainer = () => {
             <ClusterContainerSubmitButton
               numberOfPoints={numberOfPoints}
               numberOfCentroids={numberOfCentroids}
+              setCommands={setCommands}
             />
           </form>
         </div>
@@ -80,7 +81,8 @@ class ClusterContainerSubmitButton extends React.Component {
         onClick={() =>
           runGenerateRequest(
             this.props.numberOfPoints,
-            this.props.setNumberOfCentroids
+            this.props.setNumberOfCentroids,
+            this.props.setCommands
           )
         }
       >
@@ -91,7 +93,7 @@ class ClusterContainerSubmitButton extends React.Component {
 }
 
 // Run the generate request
-function runGenerateRequest(numberOfPoints, numberOfCentroids) {
+function runGenerateRequest(numberOfPoints, numberOfCentroids, setCommands) {
   // Set up method
   const method = 'POST';
 
@@ -114,7 +116,28 @@ function runGenerateRequest(numberOfPoints, numberOfCentroids) {
   const requestUrl = `/k-means/generate-test`;
 
   // Run the request
-  return request(requestUrl, options).then((data) => {
-    alert('DATA: ' + JSON.stringify(data));
+  return request(requestUrl, options).then((commands) => {
+    //alert('COMMANDS: ' + JSON.stringify(commands));
+    setCommands(commands);
   });
+}
+
+/**
+ * Creates a new draw function from commands
+ */
+function makeDrawFunctionFromCommands(commands) {
+  return (context, time) => {
+    drawGraphBackground(context);
+    for (let i = 0; i < commands.length; i++) {
+      const command = commands[i];
+      switch (command.type) {
+        case 'point':
+          drawPoint(context, command);
+          break;
+        default:
+          alert(`ERROR: Bad command: idx=${i} val=${JSON.stringify(command)}`);
+          return;
+      }
+    }
+  };
 }

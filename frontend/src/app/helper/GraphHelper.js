@@ -37,6 +37,20 @@ export const drawGraphBackground = (context) => {
   drawAxes(context);
 };
 
+/**
+ * Function for drawing a point
+ */
+export const drawPoint = (context, command) => {
+  fillStyle(context, 'black');
+  fillCircle(context, graphX(command.x), graphY(command.y), 4);
+};
+
+// Converts x to an x in the graph
+const graphX = (x) => ORIGIN_X + (x / 100.0) * INNER_LENGTH * DIR_X;
+
+// Converts y to an x in the graph
+const graphY = (y) => ORIGIN_Y + (y / 100.0) * INNER_LENGTH * DIR_Y;
+
 // Draws the markers
 const drawMarkers = (context) => {
   const level = 128;
