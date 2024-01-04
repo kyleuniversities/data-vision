@@ -105,12 +105,8 @@ const appendClusterDrawingCommands = (commands, clusters) => {
 const generateClusters = (points, numberOfCentroids) => {
   let clusters = [];
   const centroids = generateRandomCentroidList(numberOfCentroids, points);
-  console.log(' BEFORE_FOR_LOOP');
   for (let i = 0; i < NUMBER_OF_CLUSTER_ITERATIONS; i++) {
-    console.log(' i = ' + i);
     clusters = centroids.map((centroid) => ({ centroid, pointList: [] }));
-    console.log('  clusters.length = ' + clusters.length);
-    console.log('  clusters.length = ' + numberOfCentroids);
     for (let j = 0; j < points.length; j++) {
       const point = points[j];
       associatePointWithClosestCluster(point, clusters);
@@ -154,19 +150,15 @@ const testGenerate = (numberOfPoints, numberOfCentroids) => {
   const commands = [];
 
   // Generate random points
-  console.log('BEFORE_GEN_POINTS');
   const points = generatePoints(numberOfPoints);
 
   // Generate clusters
-  console.log('BEFORE_GEN_CLUSTERS');
   const clusters = generateClusters(points, numberOfCentroids);
 
   // Append commands to clusters
-  console.log('BEFORE_CLUS_DRAW_COMM');
   appendClusterDrawingCommands(commands, clusters);
 
   // Append commands to draw points
-  console.log('BEFORE_PT_DRAW_COMM: ' + clusters.length);
   appendPointDrawingCommands(commands, points);
 
   // Return drawing command list
