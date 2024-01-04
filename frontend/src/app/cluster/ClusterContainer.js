@@ -190,6 +190,17 @@ async function runGenerateDetectRequest(
     numberOfGeneratingCentroids.length === 0 ||
     numberOfDetectingCentroids.length === 0
   ) {
+    alert('There must be no empty strings');
+    return;
+  }
+
+  // Stops the action if the number of points is less than the number
+  // generating centroids
+  if (parseInt(numberOfPoints) < parseInt(numberOfGeneratingCentroids)) {
+    alert(
+      'The number of points must be greater than or equal' +
+        ' to the number of generated centroids.'
+    );
     return;
   }
 
