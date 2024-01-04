@@ -39,23 +39,29 @@ export const ClusterContainer = () => {
         <div className="clusterGenerateContainer">
           <h2>Generate:</h2>
           <form>
-            <FormInput
+            <RangedNumberFormInput
               name="points"
               label="Number of Points"
               value={numberOfPoints}
               setValue={setNumberOfPoints}
+              min={1}
+              max={1000}
             />
-            <FormInput
+            <RangedNumberFormInput
               name="generating-centroids"
               label="Number of Generating Centroids"
               value={numberOfGeneratingCentroids}
               setValue={setNumberOfGeneratngCentroids}
+              min={1}
+              max={500}
             />
-            <FormInput
+            <RangedNumberFormInput
               name="detecting-centroids"
               label="Number of Detecting Centroids"
               value={numberOfDetectingCentroids}
               setValue={setNumberOfDetectingCentroids}
+              min={1}
+              max={500}
             />
             <ClusterContainerSubmitButton
               numberOfPoints={numberOfPoints}
@@ -81,6 +87,49 @@ class ClusterGraphContainer extends React.Component {
         <h2>{this.props.title}:</h2>
         <Canvas width={400} height={400} draw={this.props.draw} />
       </div>
+    );
+  }
+}
+
+// Component for input while checking for a range
+class RangedNumberFormInput extends React.Component {
+  render() {
+    // Validates input to ensure it fits within a given range
+    const handleChangeValue = (newValue) => {
+      // Passes if the value is empty
+      if (newValue.length === 0) {
+        this.props.setValue(newValue);
+        return;
+      }
+
+      // Check if is an integer
+      const zeroCode = '0'.charCodeAt(0);
+      const nineCode = '9'.charCodeAt(0);
+      for (let i = 0; i < newValue.length; i++) {
+        const code = newValue.charCodeAt(i);
+        if (code < zeroCode || code > nineCode) {
+          return;
+        }
+      }
+
+      // Parse if it is integer
+      const intValue = parseInt(newValue);
+
+      // Check if it is within range
+      if (this.props.min <= intValue && intValue <= this.props.max) {
+        // Update the field value if all checks have passed
+        this.props.setValue(newValue);
+      }
+    };
+
+    // Return component
+    return (
+      <FormInput
+        name={this.props.name}
+        label={this.props.label}
+        value={this.props.value}
+        setValue={handleChangeValue}
+      />
     );
   }
 }
@@ -135,6 +184,15 @@ async function runGenerateDetectRequest(
   setGeneratedCommands,
   setDetectedCommands
 ) {
+  // Stops the action if the text is invalid
+  if (
+    numberOfPoints.length === 0 ||
+    numberOfGeneratingCentroids.length === 0 ||
+    numberOfDetectingCentroids.length === 0
+  ) {
+    return;
+  }
+
   // Generate clusters
   const generatedClusters = await runGenerateRequest(
     numberOfPoints,
