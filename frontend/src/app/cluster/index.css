@@ -1,12 +1,12 @@
 .clusterGraphContainer {
     color: black;
-    padding-left: 0px;
+    padding-left: 12%;
     padding-right: 120px;
     width: 45%;
 }
 
 .clusterGenerateContainer {
-    width: 25%;
+    width: 40%;
 }
 
 .clusterContentContainer {

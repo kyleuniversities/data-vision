@@ -1,3 +1,4 @@
+import { brightenColor, stringifyColor } from '../color';
 import {
   fillCircle,
   fillRect,
@@ -50,14 +51,16 @@ export const drawPoint = (context, command) => {
 export const drawCluster = (context, command) => {
   const centroid = command.centroid;
   const radius = command.radius;
-  fillStyle(context, 'rgba(100,255,100,100)');
+  const color = command.color;
+  const brightColor = brightenColor(color, 0.5);
+  fillStyle(context, stringifyColor(brightColor));
   fillCircle(
     context,
     graphX(centroid.x),
     graphY(centroid.y),
     graphLength(radius + 5)
   );
-  fillStyle(context, 'rgba(0,255,0,100)');
+  fillStyle(context, stringifyColor(color));
   fillCircle(
     context,
     graphX(centroid.x),

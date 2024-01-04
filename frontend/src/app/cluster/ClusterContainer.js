@@ -8,22 +8,33 @@ import {
 } from '../helper/GraphHelper';
 import { request } from '../request';
 import { debugAlert } from '../debugAlert';
+import { Color } from '../color';
 
 /**
  * Container for viewing cluster graphs
  */
 export const ClusterContainer = () => {
-  // Set up form data
-  const [commands, setCommands] = useState([]);
-  const [numberOfPoints, setNumberOfPoints] = useState('16');
-  const [numberOfCentroids, setNumberOfCentroids] = useState('8');
+  // Set up user input form data
+  const [numberOfPoints, setNumberOfPoints] = useState('100');
+  const [numberOfGeneratingCentroids, setNumberOfGeneratngCentroids] = useState(
+    '5'
+  );
+  const [numberOfDetectingCentroids, setNumberOfDetectingCentroids] = useState(
+    '5'
+  );
+
+  // Set up output form data
+  const [generatedCommands, setGeneratedCommands] = useState([]);
+  const [detectedCommands, setDetectedCommands] = useState([]);
 
   // Set up draw function
-  const draw = makeDrawFunctionFromCommands(commands);
+  const drawGenerated = makeDrawFunctionFromCommands(generatedCommands);
+  const drawDetected = makeDrawFunctionFromCommands(detectedCommands);
 
+  // Return component
   return (
-    <div className="clusterContainer">
-      <h1>Cluster Graph</h1>
+    <div id="clusterContainer">
+      <h1>K-Means Cluster Graph</h1>
       <div className="clusterContentContainer">
         <div className="clusterGenerateContainer">
           <h2>Generate:</h2>
@@ -35,26 +46,44 @@ export const ClusterContainer = () => {
               setValue={setNumberOfPoints}
             />
             <FormInput
-              name="centroids"
-              label="Number of Centroids"
-              value={numberOfCentroids}
-              setValue={setNumberOfCentroids}
+              name="generating-centroids"
+              label="Number of Generating Centroids"
+              value={numberOfGeneratingCentroids}
+              setValue={setNumberOfGeneratngCentroids}
+            />
+            <FormInput
+              name="detecting-centroids"
+              label="Number of Detecting Centroids"
+              value={numberOfDetectingCentroids}
+              setValue={setNumberOfDetectingCentroids}
             />
             <ClusterContainerSubmitButton
               numberOfPoints={numberOfPoints}
-              numberOfCentroids={numberOfCentroids}
-              setCommands={setCommands}
+              numberOfGeneratingCentroids={numberOfGeneratingCentroids}
+              numberOfDetectingCentroids={numberOfDetectingCentroids}
+              setGeneratedCommands={setGeneratedCommands}
+              setDetectedCommands={setDetectedCommands}
             />
           </form>
         </div>
-        <div className="clusterGraphContainer">
-          <h2>Graph:</h2>
-          <Canvas width={400} height={400} draw={draw} />
-        </div>
+        <ClusterGraphContainer title="Generated Graph" draw={drawGenerated} />
+        <ClusterGraphContainer title="Detected Graph" draw={drawDetected} />
       </div>
     </div>
   );
 };
+
+// Cluster Graph Container
+class ClusterGraphContainer extends React.Component {
+  render() {
+    return (
+      <div className="clusterGraphContainer">
+        <h2>{this.props.title}:</h2>
+        <Canvas width={400} height={400} draw={this.props.draw} />
+      </div>
+    );
+  }
+}
 
 // Component for input
 class FormInput extends React.Component {
@@ -83,10 +112,12 @@ class ClusterContainerSubmitButton extends React.Component {
       <button
         type="button"
         onClick={() =>
-          runGenerateRequest(
+          runGenerateDetectRequest(
             this.props.numberOfPoints,
-            this.props.numberOfCentroids,
-            this.props.setCommands
+            this.props.numberOfGeneratingCentroids,
+            this.props.numberOfDetectingCentroids,
+            this.props.setGeneratedCommands,
+            this.props.setDetectedCommands
           )
         }
       >
@@ -96,15 +127,75 @@ class ClusterContainerSubmitButton extends React.Component {
   }
 }
 
+// Run the generate detect request
+async function runGenerateDetectRequest(
+  numberOfPoints,
+  numberOfGeneratingCentroids,
+  numberOfDetectingCentroids,
+  setGeneratedCommands,
+  setDetectedCommands
+) {
+  // Generate clusters
+  const generatedClusters = await runGenerateRequest(
+    numberOfPoints,
+    numberOfGeneratingCentroids
+  );
+
+  debugAlert('GEN: ' + JSON.stringify(generatedClusters));
+
+  // Detect clusters
+  const detectedClusters = await runDetectRequest(
+    generatedClusters,
+    numberOfDetectingCentroids
+  );
+
+  // Set Generated Commands
+  runGetCommandsRequest(
+    setGeneratedCommands,
+    generatedClusters,
+    new Color(0, 128, 255)
+  );
+
+  // Set Detected Commands
+  runGetCommandsRequest(
+    setDetectedCommands,
+    detectedClusters,
+    new Color(128, 0, 255)
+  );
+}
+
 // Run the generate request
-function runGenerateRequest(numberOfPoints, numberOfCentroids, setCommands) {
+async function runGenerateRequest(numberOfPoints, numberOfGeneratingCentroids) {
+  // Set up method
+  const method = 'GET';
+
+  // Set up request parameters
+  const options = {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  // Set up request url
+  const requestUrl =
+    `/k-means/generate?` +
+    `numberOfPoints=${numberOfPoints}&` +
+    `numberOfGeneratingCentroids=${numberOfGeneratingCentroids}`;
+
+  // Run the request
+  return request(requestUrl, options);
+}
+
+// Run the generate request
+async function runDetectRequest(clusters, numberOfDetectingCentroids) {
   // Set up method
   const method = 'POST';
 
   // Set up post body
-  const generate = {
-    numberOfPoints,
-    numberOfCentroids,
+  const detect = {
+    clusters,
+    numberOfDetectingCentroids,
   };
 
   // Set up request parameters
@@ -113,15 +204,44 @@ function runGenerateRequest(numberOfPoints, numberOfCentroids, setCommands) {
     headers: {
       'Content-Type': 'application/json',
     },
-    data: JSON.stringify(generate),
+    data: JSON.stringify(detect),
   };
 
   // Set up request url
-  const requestUrl = `/k-means/generate-test`;
+  const requestUrl = `/k-means/detect`;
+
+  // Run the request
+  return request(requestUrl, options);
+}
+
+// Run get commands request
+async function runGetCommandsRequest(setCommands, clusters, color) {
+  // Set up method
+  const method = 'POST';
+
+  // Set up post body
+  const body = {
+    clusters,
+  };
+
+  // Set up request parameters
+  const options = {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: JSON.stringify(body),
+  };
+
+  // Set up request url
+  const requestUrl = `/k-means/commands`;
 
   // Run the request
   return request(requestUrl, options).then((commands) => {
     debugAlert('COMMANDS: ' + JSON.stringify(commands));
+    for (let i = 0; i < commands.length; i++) {
+      commands[i].color = color;
+    }
     setCommands(commands);
   });
 }
