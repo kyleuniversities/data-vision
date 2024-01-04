@@ -7,7 +7,7 @@ export class SitePage extends React.Component {
     return (
       <div className="sitePage">
         <SiteHeader />
-        {this.props.children}
+        <div className="sitePageContent">{this.props.children}</div>
       </div>
     );
   }
