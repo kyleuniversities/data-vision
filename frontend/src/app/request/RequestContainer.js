@@ -39,10 +39,6 @@ class RequestContainerSegment extends React.Component {
 
 // Url text field for the Request Container
 class RequestContainerUrlTextField extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <input

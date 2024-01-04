@@ -22,7 +22,7 @@ class SiteHeaderHomeIconItem extends React.Component {
     return (
       <div class="siteHeaderImage">
         <Link to="/">
-          <img src={logo} />
+          <img alt="" src={logo} />
         </Link>
       </div>
     );

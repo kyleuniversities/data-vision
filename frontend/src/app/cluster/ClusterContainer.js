@@ -7,7 +7,6 @@ import {
   drawPoint,
 } from '../helper/GraphHelper';
 import { request } from '../request';
-import { fillCircle, fillStyle } from '../helper/DrawHelper';
 
 /**
  * Container for viewing cluster graphs
