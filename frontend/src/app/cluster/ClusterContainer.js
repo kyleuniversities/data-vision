@@ -7,6 +7,7 @@ import {
   drawPoint,
 } from '../helper/GraphHelper';
 import { request } from '../request';
+import { debugAlert } from '../debugAlert';
 
 /**
  * Container for viewing cluster graphs
@@ -120,7 +121,7 @@ function runGenerateRequest(numberOfPoints, numberOfCentroids, setCommands) {
 
   // Run the request
   return request(requestUrl, options).then((commands) => {
-    alert('COMMANDS: ' + JSON.stringify(commands));
+    debugAlert('COMMANDS: ' + JSON.stringify(commands));
     setCommands(commands);
   });
 }
