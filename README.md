@@ -34,6 +34,14 @@ I will be completely honest, I was able to make this project in under 12 hours. 
 
 &nbsp;
 
+## Release
+
+In case I decide to expand this app in the future, I will mark this point in development with a release.
+
+&nbsp;
+
+&nbsp;
+
 ## Github Repositories
 
 [https://github.com/kyleuniversities/data-vision](https://github.com/kyleuniversities/data-vision)
