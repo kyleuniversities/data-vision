@@ -1,10 +1,11 @@
 import React from 'react';
+import { SitePage } from '../SitePage';
 
 export class HomePage extends React.Component {
   render() {
     return (
       <div>
-        <p>Hello</p>
+        <SitePage>Hello World!</SitePage>
       </div>
     );
   }

@@ -1,0 +1,28 @@
+.siteHeaderImage {
+    display: inline-block;
+}
+
+.siteHeaderSegment {
+    background-color: rgb(255, 50, 50);
+    padding-left: 5px;
+    color: rgb(0,0,0);
+    border-color: rgb(80,0,0);
+    border-bottom: 5px solid rgb(80,0,0);
+    border-radius: 0px;
+}
+
+#siteHeaderTitleItem {
+    color: rgb(0,0,0);
+    font-family: 'Times New Roman';
+    font-size: 60px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 20px;
+    margin-bottom: 40px;
+}
+
+.sitePage {
+    background-color: rgb(255, 50, 50);
+    min-height: 100vh;
+    color: rgb(0,0,0)
+}
