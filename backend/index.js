@@ -22,7 +22,7 @@ router.get('/hello', function (req, res) {
 });
 
 // Mount routes
-app.use('/k-means', require('./router/k-means-router'));
+app.use('/k-means', require('./app/router/k-means-router'));
 
 // Launch app
 app.listen(port, () => {

@@ -13,7 +13,6 @@ const BORDER_WIDTH = 4;
 const PADDING_WIDTH = 24;
 const AXES_WIDTH = 3;
 const MARKERS_WIDTH = 2;
-const POINT_RADIUS = 6;
 const INNER_LENGTH = WIDTH - 2 * BORDER_WIDTH - PADDING_WIDTH * 2;
 const NUMBER_OF_MARKERS_PER_AXIS = 4;
 const MARK_LENGTH = INNER_LENGTH / (NUMBER_OF_MARKERS_PER_AXIS + 1);
@@ -44,6 +43,31 @@ export const drawPoint = (context, command) => {
   fillStyle(context, 'black');
   fillCircle(context, graphX(command.x), graphY(command.y), 4);
 };
+
+/**
+ * Function for drawing a cluster
+ */
+export const drawCluster = (context, command) => {
+  const centroid = command.centroid;
+  const radius = command.radius;
+  fillStyle(context, 'rgba(100,255,100,100)');
+  fillCircle(
+    context,
+    graphX(centroid.x),
+    graphY(centroid.y),
+    graphLength(radius + 5)
+  );
+  fillStyle(context, 'rgba(0,255,0,100)');
+  fillCircle(
+    context,
+    graphX(centroid.x),
+    graphY(centroid.y),
+    graphLength(radius)
+  );
+};
+
+// Converts a length to a length in the graph
+const graphLength = (length) => (length / 100.0) * INNER_LENGTH;
 
 // Converts x to an x in the graph
 const graphX = (x) => ORIGIN_X + (x / 100.0) * INNER_LENGTH * DIR_X;

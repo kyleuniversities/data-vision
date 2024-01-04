@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Canvas } from './Canvas';
 import './index.css';
-import { drawGraphBackground, drawPoint } from '../helper/GraphHelper';
+import {
+  drawCluster,
+  drawGraphBackground,
+  drawPoint,
+} from '../helper/GraphHelper';
 import { request } from '../request';
 import { fillCircle, fillStyle } from '../helper/DrawHelper';
 
@@ -81,7 +85,7 @@ class ClusterContainerSubmitButton extends React.Component {
         onClick={() =>
           runGenerateRequest(
             this.props.numberOfPoints,
-            this.props.setNumberOfCentroids,
+            this.props.numberOfCentroids,
             this.props.setCommands
           )
         }
@@ -117,7 +121,7 @@ function runGenerateRequest(numberOfPoints, numberOfCentroids, setCommands) {
 
   // Run the request
   return request(requestUrl, options).then((commands) => {
-    //alert('COMMANDS: ' + JSON.stringify(commands));
+    alert('COMMANDS: ' + JSON.stringify(commands));
     setCommands(commands);
   });
 }
@@ -133,6 +137,9 @@ function makeDrawFunctionFromCommands(commands) {
       switch (command.type) {
         case 'point':
           drawPoint(context, command);
+          break;
+        case 'cluster':
+          drawCluster(context, command);
           break;
         default:
           alert(`ERROR: Bad command: idx=${i} val=${JSON.stringify(command)}`);

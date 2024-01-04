@@ -39,15 +39,9 @@ router.post('/test-post', async (req, res) => {
 
 // Set up generate test endpoint
 router.post('/generate-test', async (req, res) => {
-  try {
-    const numberOfPoints = parseInt(req.body.numberOfPoints);
-    const numberOfCentroids = parseInt(req.body.numberOfPoints);
-    return res.send(testGenerate(numberOfPoints, numberOfCentroids));
-  } catch (error) {
-    return res.status(500).json({
-      error_message: 'Server Error',
-    });
-  }
+  const numberOfPoints = parseInt(req.body.numberOfPoints);
+  const numberOfCentroids = parseInt(req.body.numberOfCentroids);
+  return res.send(testGenerate(numberOfPoints, numberOfCentroids));
 });
 
 // Export routes
