@@ -1,6 +1,6 @@
 # Data Vision
 
-The Data Vision application is a simple JavaScript fullstack application that provides visualization for K-Means Clusters. It consists of ReactJS for the frontend and ExpressJS for the backend.  Users can generate clusters points and visualize the effects of the K-Means Clustering algorithm performed on those points.
+The Data Vision application is a simple JavaScript fullstack application that provides visualization for K-Means Clusters. It consists of ReactJS for the frontend and ExpressJS for the backend.  Users can generate cluster points and visualize the effects of the K-Means Clustering algorithm performed on those points.
 
 &nbsp;
 
