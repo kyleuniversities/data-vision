@@ -3,6 +3,9 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const testGenerate = require('../util/k-means-test-generator');
+const generate = require('../util/k-means-generator');
+const getCommands = require('../util/k-means-commands');
+const detect = require('../util/k-means-detector');
 
 // Prepare request parser
 router.use(bodyParser.json());
@@ -15,26 +18,27 @@ router.use(
   })
 );
 
-// Set up test endpoint
-router.get('/test', async (req, res) => {
-  try {
-    return res.send('Test');
-  } catch (error) {
-    return res.status(500).json({
-      error_message: 'Server Error',
-    });
-  }
+// Set up generate test endpoint
+router.get('/generate', async (req, res) => {
+  const numberOfPoints = parseInt(req.query.numberOfPoints);
+  const numberOfGeneratingCentroids = parseInt(
+    req.query.numberOfGeneratingCentroids
+  );
+  return res.send(generate(numberOfPoints, numberOfGeneratingCentroids));
 });
 
-// Set up test post endpoint
-router.post('/test-post', async (req, res) => {
-  try {
-    return res.send(body);
-  } catch (error) {
-    return res.status(500).json({
-      error_message: 'Server Error',
-    });
-  }
+// Set up get commands from clusters endpoint
+router.post('/commands', async (req, res) => {
+  return res.send(getCommands(req.body.clusters));
+});
+
+// Set up detect clusters endpoint
+router.post('/detect', async (req, res) => {
+  const clusters = req.body.clusters;
+  const numberOfDetectingCentroids = parseInt(
+    req.body.numberOfDetectingCentroids
+  );
+  return res.send(detect(clusters, numberOfDetectingCentroids));
 });
 
 // Set up generate test endpoint
